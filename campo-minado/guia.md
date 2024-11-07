@@ -29,6 +29,7 @@
 1. **Grid (Tabuleiro)**
    - **Entrada:**
      - `Int`: Tamanho do tabuleiro.
+     - `String`: Dificuldade escolhida ("easy", "normal, "hard").
      - `Coord`: Coordenadas da célula a ser revelada.
    - **Saída:**
      - `Grid`: Matriz com o estado atualizado das células.
@@ -68,10 +69,13 @@
 1. **Tamanho do Tabuleiro**
    - O tamanho do tabuleiro é definido pelo usuário no início do jogo. Exemplo: `size :: Int`
 
-2. **Movimentos do Usuário**
+2. **Escolher Dificuldade**
+   - O usuário escolhe a dificuldade do jogo o que pode impactar em mais ou menos bombas geradas. Exemplo: `difficulty :: String`
+
+3. **Movimentos do Usuário**
    - O usuário fornece as coordenadas da célula que deseja revelar. Exemplo: `input :: (Int, Int)`
 
-3. **Interações do Bot**
+4. **Interações do Bot**
    - O Bot gera movimentos aleatórios ou otimizados, dependendo do nível de dificuldade.
    - Diferentes estratégias de input para simular a jogabilidade do usuário.
 
@@ -81,6 +85,7 @@
 
 1. **Jogo no Modo Usuário**
    - **Entrada:** `generateGrid 10` (gera um tabuleiro 10x10)
+   - **Entrada:** `getBombChance "easy"` (gera um tabuleiro com dificuldade fácil)
    - **Saída:** Tabuleiro com células ocultas e uma contagem de bombas.
 
 2. **Jogo no Modo Bot**
@@ -101,7 +106,7 @@
      - `Grid`: Matriz com o estado atualizado das células.
      - `Int`: Número de bombas no tabuleiro.
    - **Funções Chave:**
-     - `generateGrid :: Int -> IO (Grid, Int)`: Gera um campo minado aleatório.
+     - `generateGrid :: Int -> Int -> IO (Grid, Int)`: Gera um campo minado ajustado para dificuldade e tamanho do grid.
      - `countAdjacentBombs :: Grid -> Int -> Grid`: Conta bombas adjacentes a cada célula.
      - `revealBombs :: Grid -> Grid`: Revela todas as bombas ao perder o jogo.
   
@@ -147,7 +152,8 @@
      ```haskell
      main :: IO ()
      main = do
-         (grid, countBombs) <- generateGrid 10
+         let bombChance = getBombChance "easy" 10 1
+         (grid, countBombs) <- generateGrid 10 bombchance
          let win = 100 - countBombs
          (result, newCount, updatedGrid) <- bfs grid 10 (5, 5) 0 win
          if result

@@ -16,8 +16,7 @@ getBombChance :: String -> Int -> Int
 getBombChance "easy" size = max 1 (size * size `div` 10)   
 getBombChance "normal" size = max 2 (size * size `div` 5)  
 getBombChance "hard" size = max 3 (size * size `div` 3)    -- quanto menor o valor, maior a dificuldade
-getBombChance _ size = max 2 (size * size `div` 5)         
-
+getBombChance _ size = max 2 (size * size `div` 5)         -- valor padrão
 
 playGame :: Int -> String -> IO ()
 playGame size difficulty = do
