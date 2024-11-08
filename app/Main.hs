@@ -101,6 +101,13 @@ selectDifficulty = do
         "3" -> "Dificil"
         _   -> "Facil"  -- Dificuldade padrão caso a entrada seja inválida
 
+displayEndScreen :: String -> IO ()
+displayEndScreen message = withWindow 400 200 "Resultado" 60 $ \_ -> do
+  whileWindowOpen_ (not <$> windowShouldClose) $ do
+    drawing $ do
+      clearBackground white
+      drawText message 50 80 20 black
+
 main :: IO ()
 main = do
   gridSize <- selectGridSize
@@ -147,6 +154,13 @@ main = do
               else 
                 putStrLn "                Game running"
             else return ()
+            
+            -- Verifica se o jogo terminou
+            when (state'finished newState) $ do
+              closeWindow  -- Fecha a janela atual
+              if state'win newState
+                then displayEndScreen "Você ganhou!"
+                else displayEndScreen "Você perdeu!"
 
             -- 3. Renderizar
             drawing
